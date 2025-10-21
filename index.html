@@ -1,86 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UnyPatcher - Patch Your Unity Games</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #ff99cc, #ffe6f2);
-            color: #333;
-        }
-        header {
-            background: rgba(255, 77, 148, 0.8);
-            padding: 20px 0;
-            text-align: center;
-            border-bottom: 2px solid #fff;
-        }
-        section {
-            padding: 20px;
-            margin: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-        footer {
-            text-align: center;
-            padding: 10px 0;
-            background: rgba(255, 77, 148, 0.8);
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UnyPatcher - Patch Your Unity Games</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #ff99cc, #ffe6f2);
+        color: #333;
+        overflow-x: hidden;
+    }
+
+    header {
+        background: rgba(255, 77, 148, 0.4);
+        padding: 20px 0;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        animation: headerFade 1.5s ease forwards;
+    }
+
+    @keyframes headerFade {
+        0% { opacity: 0; transform: translateY(-20px);}
+        100% { opacity: 1; transform: translateY(0);}
+    }
+
+    section {
+        padding: 20px;
+        margin: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    section.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    footer {
+        text-align: center;
+        padding: 10px 0;
+        background: rgba(255, 77, 148, 0.4);
+        border-top: 1px solid rgba(255, 255, 255, 0.5);
+        width: 100%;
+    }
+
+    .features {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .feature {
+        flex: 1 1 30%;
+        margin: 10px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .feature:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    }
+
+    a.button {
+        display: inline-block;
+        padding: 10px 20px;
+        background: #ff4d94;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background 0.3s, transform 0.3s;
+    }
+
+    a.button:hover {
+        background: #ff1a6d;
+        transform: scale(1.05);
+    }
+
+    h1, h2, h3 {
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    }
+
+    .screenshots {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 10px;
+    }
+
+    .screenshot {
+        max-width: 45%;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .screenshot:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    }
+
+    .lightbox {
+        position: fixed;
+        display: none;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease forwards;
+    }
+
+    .lightbox img {
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 10px;
+    }
+
+    @keyframes fadeIn {
+        from {opacity:0;}
+        to {opacity:1;}
+    }
+
+    /* Loader animation */
+    .loader {
+        border: 4px solid #f3f3f3; 
+        border-top: 4px solid #ff4d94; 
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        margin: 0 auto;
+        animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg);}
+        100% { transform: rotate(360deg);}
+    }
+
+    @media (max-width: 768px) {
         .features {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
+            flex-direction: column;
+            align-items: center;
         }
         .feature {
-            flex: 1 1 30%;
-            margin: 10px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-        a {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #ff4d94;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-        a:hover {
-            background: #ff1a6d;
-        }
-        h1, h2, h3 {
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-        }
-        /* Screenshots Styles */
-        .screenshots {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 10px;
+            flex: 1 1 80%;
         }
         .screenshot {
-            max-width: 45%;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s;
+            max-width: 90%;
         }
-        .screenshot:hover {
-            transform: scale(1.05);
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
 
@@ -115,12 +200,16 @@
 <section>
     <h2>Download UnyPatcher</h2>
     <p>Get the latest version of UnyPatcher and start enhancing your Unity games today!</p>
-    <a href="https://github.com/McCram12/UnyPatcher/releases/download/Release/unyPatcher.exe" download>Download Now</a>
+    <a id="downloadButton" class="button" href="https://github.com/McCram12/UnyPatcher/releases/download/Release/unyPatcher.exe" download>Download Now</a>
+    <div id="downloadAnimation" style="display:none; margin-top:10px; text-align:center;">
+        <div class="loader"></div>
+        <p id="thankYouText" style="margin-top:10px; font-weight:bold; display:none;">Thank you for downloading!</p>
+    </div>
 </section>
 
 <section>
     <h2>Screenshots</h2>
-    <p>Take a look at UnyPatcher in action:</p>
+    <p>Click an image to enlarge it:</p>
     <div class="screenshots">
         <img src="screenshot1.png" alt="UnyPatcher Screenshot 1" class="screenshot">
         <img src="screenshot2.png" alt="UnyPatcher Screenshot 2" class="screenshot">
@@ -135,6 +224,58 @@
 <footer>
     <p><a href="https://github.com/McCram12/UnyPatcher" style="color: #fff;">GitHub Repository</a></p>
 </footer>
+
+<!-- Lightbox container -->
+<div class="lightbox" id="lightbox">
+    <img src="" alt="Enlarged screenshot">
+</div>
+
+<script>
+    // Scroll fade-in animation
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting){
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+    sections.forEach(section => observer.observe(section));
+
+    // Lightbox
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = lightbox.querySelector('img');
+    const screenshots = document.querySelectorAll('.screenshot');
+    screenshots.forEach(img => {
+        img.addEventListener('click', () => {
+            lightbox.style.display = 'flex';
+            lightboxImg.src = img.src;
+            lightboxImg.alt = img.alt;
+        });
+    });
+    lightbox.addEventListener('click', () => {
+        lightbox.style.display = 'none';
+        lightboxImg.src = '';
+    });
+
+    // Download animation and thank you
+    const downloadButton = document.getElementById('downloadButton');
+    const downloadAnimation = document.getElementById('downloadAnimation');
+    const thankYouText = document.getElementById('thankYouText');
+
+    downloadButton.addEventListener('click', (e) => {
+        e.preventDefault(); // Prevent immediate navigation
+        downloadAnimation.style.display = 'block';
+        thankYouText.style.display = 'none';
+
+        setTimeout(() => {
+            window.location.href = downloadButton.href; // Start download
+            setTimeout(() => {
+                thankYouText.style.display = 'block'; // Show thank you
+            }, 1500);
+        }, 200);
+    });
+</script>
 
 </body>
 </html>
